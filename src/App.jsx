@@ -2,8 +2,10 @@ import './App.css'
 import ResponsiveArticleCard from './components/newArticalPreview'
 import DailyQoutes from './pages/DailyQuotes'
 import DailyStreak from './pages/DailyStreak'
+import Layout from './pages/Layout'
 import MonthlyTracker from './pages/MonthlyTracker'
 import TaskDashboard from './pages/TaskTracker'
+import WeekTrackerComponent from './pages/WeeklyTaskTracker'
 
 function App() {
 
@@ -13,7 +15,10 @@ function App() {
       {/* <TaskDashboard/> */}
       {/* <DailyStreak/> */}
       {/* <MonthlyTracker/> */}
-      <DailyQoutes />
+      {/* <DailyQoutes /> */}
+      <Layout>
+        <WeekTrackerComponent />
+      </Layout>
     </>
   )
 }
