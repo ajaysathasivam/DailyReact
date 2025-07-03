@@ -9,6 +9,7 @@ import Layout from './pages/Layout'
 import MonthlyTracker from './pages/MonthlyTracker'
 import TaskDashboard from './pages/TaskTracker'
 import WeekTrackerComponent from './pages/WeeklyTaskTracker'
+import ProgressTracker from './components/ProgressTracker'
 
 function App() {
 
@@ -23,9 +24,10 @@ function App() {
       {/* <Layout>
         <WeekTrackerComponent />
       </Layout> */}
-      <BookReadingTrackerLayout>
+      {/* <BookReadingTrackerLayout>
         <BookReadTracker/>
-      </BookReadingTrackerLayout>
+      </BookReadingTrackerLayout> */}
+      <ProgressTracker/>
     </>
   )
 }
