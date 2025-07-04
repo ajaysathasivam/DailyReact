@@ -1,40 +1,85 @@
 import { useState } from "react";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../components/ui/select";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "../components/ui/select";
 import { toast } from "sonner";
 
 const categories = ["Health", "Work", "Coding", "Finance", "Hobby"];
 
 export default function ProgressForm({ handleFormData }) {
-  const [form, setForm] = useState({ title: "", category: "coding", percentage: "" });
+  const [form, setForm] = useState({
+    title: "",
+    category: "Coding",
+    percentage: "",
+  });
+
+  const isFormValid = () => {
+    const { title, category, percentage } = form;
+    const percent = Number(percentage);
+    return (
+      title.trim() &&
+      category &&
+      percentage !== "" &&
+      !isNaN(percent) &&
+      percent >= 0 &&
+      percent <= 100
+    );
+  };
+
+  const handleInputChange = (field) => (e) => {
+    setForm({ ...form, [field]: e.target.value });
+  };
 
   const handleSubmit = () => {
-    const { title, category, percentage } = form;
-
-    if (!title || !category || percentage === "" || isNaN(percentage) || percentage < 0 || percentage > 100) {
-      toast.error("Please fill out all fields correctly (0-100%)");
+    if (!isFormValid()) {
+      toast.error("Please fill out all fields correctly (0–100%)");
       return;
     }
 
-    handleFormData({ ...form, percentage: Number(percentage) });
-    setForm({ title: "", category: "", percentage: "" });
+    handleFormData({ ...form, percentage: Number(form.percentage) });
+
+    setForm({ title: "", category: "Coding", percentage: "" });
     toast.success("Progress added!");
   };
 
   return (
-    <div className="p-4 space-y-4 bg-white shadow-md rounded-xl max-w-md mx-auto">
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        handleSubmit();
+      }}
+      className="p-4 space-y-4 bg-white shadow-md rounded-xl max-w-md mx-auto"
+      aria-label="Add Progress Form"
+    >
+      <label htmlFor="title" className="sr-only">
+        Title
+      </label>
       <Input
+        id="title"
+        name="title"
         placeholder="Title"
         value={form.title}
-        onChange={(e) => setForm({ ...form, title: e.target.value })}
+        onChange={handleInputChange("title")}
+        required
       />
 
-      <Select  value={form.category} onValueChange={(val) => setForm({ ...form, category: val })}>
-        <SelectTrigger >
+      <label htmlFor="category" className="sr-only">
+        Category
+      </label>
+      <Select
+        value={form.category}
+        onValueChange={(val) => setForm({ ...form, category: val })}
+      >
+        <SelectTrigger id="category">
           <SelectValue placeholder="Select category" />
         </SelectTrigger>
-        <SelectContent >
+        <SelectContent>
           {categories.map((cat) => (
             <SelectItem key={cat} value={cat}>
               {cat}
@@ -43,16 +88,24 @@ export default function ProgressForm({ handleFormData }) {
         </SelectContent>
       </Select>
 
+      <label htmlFor="percentage" className="sr-only">
+        Progress Percentage
+      </label>
       <Input
+        id="percentage"
+        name="percentage"
         type="number"
         placeholder="Progress %"
         value={form.percentage}
-        onChange={(e) => setForm({ ...form, percentage: e.target.value })}
+        onChange={handleInputChange("percentage")}
+        min="0"
+        max="100"
+        required
       />
 
-      <Button onClick={handleSubmit} className="w-full">
+      <Button type="submit" className="w-full">
         Add Progress
       </Button>
-    </div>
+    </form>
   );
 }

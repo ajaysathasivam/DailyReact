@@ -1,28 +1,26 @@
-import React, { useState } from 'react'
-import ProgressForm from './ProgressForm';
-import ProgressList from './ProgressList';
+import { lazy, useState } from "react";
+const ProgressForm = lazy(() => import('./ProgressForm'))
+const ProgressList = lazy(() => import('./ProgressList'))
 
-const ProgressTracker = () => {
-
+export default function ProgressTracker() {
     const [progressData, setProgressData] = useState([]);
 
-    const handleFormData = (newEntry) => {
-        const id = crypto.randomUUID();
-        setProgressData((prev) => [...prev, { ...newEntry, id }]);
+    const addProgress = (entry) => {
+        setProgressData((prev) => [...prev, { ...entry, id: crypto.randomUUID() }]);
     };
 
-    const handleUpdateProgress = (id, updatedPercentage) => {
+    const updateProgress = (id, percentage) => {
         setProgressData((prev) =>
-            prev.map((item) => (item.id === id ? { ...item, percentage: updatedPercentage } : item))
+            prev.map((item) =>
+                item.id === id ? { ...item, percentage } : item
+            )
         );
     };
 
     return (
         <div className="space-y-8">
-            <ProgressForm handleFormData={handleFormData} />
-            <ProgressList list={progressData} handleUpdateProgress={handleUpdateProgress} />
+            <ProgressForm handleFormData={addProgress} />
+            <ProgressList list={progressData} handleUpdateProgress={updateProgress} />
         </div>
     );
 }
-
-export default ProgressTracker
